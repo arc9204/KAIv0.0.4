@@ -1,0 +1,1621 @@
+/* =========================================================
+   home.css - styles for index.php only
+   version: 2026-10-12 (3D flying photos + CM/INCH switch)
+   ========================================================= */
+
+/* ---------- HERO ---------- */
+.hero {
+    position: relative;
+    height: 900px;
+    max-height: 100vh;
+    min-height: 640px;
+    overflow: hidden;
+    background: #000;
+    color: var(--white);
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.9s ease, visibility 0.9s;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slide-main {
+    background-image: url('../images/hero-bg.png');
+}
+
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 100%);
+}
+
+.hero-overlay.dark {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+/* the thin white lines in the design */
+.hero-line-v {
+    position: absolute;
+    left: 38px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.hero-line-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 25.8%; /* 668px from top of 900px */
+    height: 1px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.hero-bottom {
+    position: absolute;
+    left: 62px;
+    right: 39px;
+    bottom: 42px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.hero h1 {
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: -1.28px;
+    line-height: 1.37;
+}
+
+.hero-side {
+    width: 527px;
+    padding-top: 9px;
+}
+
+.hero-side p {
+    font-size: 24px;
+    letter-spacing: -0.48px;
+    margin-bottom: 25px;
+    padding-left: 13px;
+}
+
+/* ---------- slide 2: "Every project tells a story." ----------
+   3D "fly-through" like the reference video:
+   the photos start far away (small, near the middle, behind the text)
+   then fly towards the screen (bigger, spreading out, passing IN FRONT of the text)
+   then fade out and start again. loop forever.
+
+   how it works:
+   - .story-stage has perspective = the "camera"
+   - each photo moves on the Z axis (translateZ) = towards the camera
+   - the text sits at Z = 0, so the browser itself puts a photo
+     behind the text (Z < 0) or in front of it (Z > 0)
+   no JS needed, all CSS. */
+.slide-story {
+    background: url('../images/about-bg.png') center / cover no-repeat;
+    overflow: hidden;
+}
+
+.slide-story .hero-overlay.dark {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.story-stage {
+    position: absolute;
+    inset: 0;
+    perspective: 1000px;           /* distance of the "camera" */
+    perspective-origin: 50% 50%;   /* the photos fly out from the middle */
+    transform-style: preserve-3d;  /* so the photos and the text share one 3D space */
+    pointer-events: none;
+    --s: 1.2;                      /* tile size multiplier (smaller on phones) */
+}
+
+.tile {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: calc(var(--w) * var(--s));
+    height: calc(var(--h) * var(--s));
+    /* center the photo on its x / y point */
+    margin-left: calc(var(--w) * var(--s) / -2);
+    margin-top: calc(var(--h) * var(--s) / -2);
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    animation: flyToScreen var(--dur) linear var(--delay) infinite;
+}
+
+/* -1800px = very far (about 35% size)
+   0       = same distance as the text (real size)
+   500px   = very near (2x size), most of them are already off the screen by then */
+@keyframes flyToScreen {
+    0% {
+        transform: translateZ(-1800px);
+        opacity: 0;
+    }
+    12% {
+        opacity: 0.85;
+    }
+    60% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateZ(500px);
+        opacity: 0;
+    }
+}
+
+/* each photo: where it is (--x, --y), size, speed and start time.
+   negative delay = already flying when the page loads (para hindi empty sa simula).
+   the delays are spread out so there's always some far, some middle and some near */
+.t1  { --x: 8%;  --y: 18%; --w: 120px; --h: 84px;  --dur: 20s; --delay: -1s; }
+.t2  { --x: 22%; --y: 74%; --w: 96px;  --h: 96px;  --dur: 22s; --delay: -14s; }
+.t3  { --x: 80%; --y: 22%; --w: 104px; --h: 130px; --dur: 19s; --delay: -6s; }
+.t4  { --x: 64%; --y: 80%; --w: 128px; --h: 86px;  --dur: 21s; --delay: -18s; }
+.t5  { --x: 30%; --y: 30%; --w: 90px;  --h: 90px;  --dur: 20s; --delay: -10s; }
+.t6  { --x: 90%; --y: 60%; --w: 120px; --h: 80px;  --dur: 23s; --delay: -3s; }
+.t7  { --x: 12%; --y: 50%; --w: 92px;  --h: 116px; --dur: 21s; --delay: -16s; }
+.t8  { --x: 74%; --y: 40%; --w: 128px; --h: 72px;  --dur: 19s; --delay: -12s; }
+.t9  { --x: 42%; --y: 86%; --w: 110px; --h: 110px; --dur: 22s; --delay: -8s; }
+.t10 { --x: 57%; --y: 14%; --w: 120px; --h: 80px;  --dur: 20s; --delay: -19s; }
+.t11 { --x: 88%; --y: 88%; --w: 112px; --h: 76px;  --dur: 21s; --delay: -5s; }
+.t12 { --x: 20%; --y: 90%; --w: 120px; --h: 80px;  --dur: 23s; --delay: -21s; }
+.t13 { --x: 36%; --y: 64%; --w: 96px;  --h: 96px;  --dur: 19s; --delay: -2s; }
+.t14 { --x: 66%; --y: 60%; --w: 118px; --h: 80px;  --dur: 22s; --delay: -11s; }
+.t15 { --x: 46%; --y: 28%; --w: 126px; --h: 54px;  --dur: 20s; --delay: -15s; }
+.t16 { --x: 5%;  --y: 82%; --w: 76px;  --h: 96px;  --dur: 21s; --delay: -9s; }
+
+/* the text is at Z = 0, the middle of the "room" */
+.slide-story .slide-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) translateZ(0);
+    width: 766px;
+    max-width: 90vw;
+    text-align: center;
+    pointer-events: auto; /* so the button can be clicked */
+}
+
+.slide-story h2 {
+    font-size: 96px;
+    font-weight: 700;
+    letter-spacing: -1.9px;
+    line-height: 1.1;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    margin-bottom: 40px;
+}
+
+/* the animation only plays when slide 2 is showing (saves battery) */
+.hero-slide:not(.active) .tile {
+    animation-play-state: paused;
+}
+
+/* people who turned off animations in their OS settings:
+   paused + negative delay = each photo just stays where it is (spread out on the screen) */
+@media (prefers-reduced-motion: reduce) {
+    .tile {
+        animation-play-state: paused !important;
+    }
+}
+
+/* slide 3 */
+.slide-products h2 {
+    font-size: 96px;
+    font-weight: 700;
+    letter-spacing: -1.9px;
+    line-height: 1.1;
+}
+
+.slide-products {
+    background: url('../images/products-bg.png') center / cover no-repeat;
+}
+
+.slide-products-text {
+    position: absolute;
+    left: 6.25%;
+    top: 22%;
+    width: 667px;
+    max-width: 88%;
+}
+
+.slide-products-text p {
+    font-size: 24px;
+    letter-spacing: -0.48px;
+    margin: 30px 0 45px;
+}
+
+.slide-products-images {
+    position: absolute;
+    left: 56.7%;
+    right: 0;
+    top: 33%;
+    height: 414px;
+    display: flex;
+    gap: 50px;
+    overflow: hidden;
+}
+
+.slide-products-images img {
+    width: 341px;
+    height: 414px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.hero-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 28px;
+    z-index: 5;
+}
+
+.hero-dots .dot {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(252, 252, 252, 0.4);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.hero-dots .dot.active {
+    background: var(--white);
+}
+
+/* ---------- ABOUT US ---------- */
+.about-home {
+    padding: 32px 0 91px;
+    text-align: center;
+}
+
+.about-home .section-label {
+    line-height: 130px;
+}
+
+.about-home-cols {
+    width: 90%;
+    max-width: 1114px;
+    margin: 44px auto 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+.about-home-cols p {
+    width: 466px;
+    font-size: 24px;
+    line-height: 40px;
+}
+
+.divider-v {
+    width: 1px;
+    height: 271px;
+    background: var(--black);
+    flex-shrink: 0;
+}
+
+/* ---------- WHY CHOOSE KAI ---------- */
+.why-kai {
+    background: var(--gray-bg);
+    padding: 44px 20px 200px;
+}
+
+.why-kai .section-label {
+    line-height: 130px;
+}
+
+.kai-quote {
+    position: relative;
+    width: 919px;
+    max-width: 100%;
+    margin: 84px auto 0;
+}
+
+.kai-quote p {
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.33;
+}
+
+.kai-quote .indent {
+    display: inline-block;
+    width: 150px;
+}
+
+.kai-quote strong {
+    font-weight: 700;
+}
+
+.kai-quote em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 44px;
+}
+
+.quote-mark {
+    font-family: var(--font-serif);
+    color: var(--black);
+    line-height: 1;
+}
+
+.quote-mark.open {
+    position: absolute;
+    left: 6px;
+    top: -40px;
+    font-size: 150px;
+    opacity: 0.85;
+}
+
+.quote-mark.close {
+    font-size: 60px;
+    vertical-align: -18px;
+    margin-left: 4px;
+}
+
+.kai-quote footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    font-size: 24px;
+}
+
+.kai-quote .dash {
+    width: 16px;
+    height: 1px;
+    background: var(--black);
+}
+
+/* ---------- SERVICES ---------- */
+.services-home {
+    background: var(--navy);
+    color: var(--white);
+    padding: 155px 0 172px;
+}
+
+.services-home-top {
+    width: 90%;
+    max-width: 1246px;
+    margin: 0 auto 108px;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.services-home-top h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+}
+
+.services-home-top p {
+    width: 558px;
+    font-size: 24px;
+    line-height: 40px;
+    padding-top: 5px;
+}
+
+.service-cards {
+    width: 90%;
+    max-width: 1222px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 34px;
+}
+
+.service-card {
+    position: relative;
+    height: 500px;
+    background: var(--dark-blue);
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.25));
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+}
+
+/* the card with a picture (fabrication) */
+.service-card-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% center;
+}
+
+/* black gradient on top of the picture */
+.service-card.has-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000);
+}
+
+.service-card-body {
+    position: relative;
+    z-index: 2;
+    padding: 0 24px 30px 25px;
+    width: 100%;
+}
+
+/* outlined numbers (transparent text) */
+.service-num {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 64px;
+    letter-spacing: -1.28px;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.85);
+    margin-bottom: 30px;
+}
+
+.service-card h3 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 40px;
+}
+
+.service-card p {
+    font-size: 20px;
+    line-height: 40px;
+    min-height: 80px;
+    margin-bottom: 30px;
+}
+
+.read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 40px;
+}
+
+.arrow-circle {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    background: var(--cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    transition: transform 0.3s;
+}
+
+.read-more:hover .arrow-circle {
+    transform: rotate(45deg);
+}
+
+/* ---------- PRODUCTS ---------- */
+.products-home {
+    position: relative;
+    height: 1100px;
+    background: #000;
+    color: var(--white);
+    padding-top: 87px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.products-home::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../images/products-bg.png') center / cover no-repeat;
+    opacity: 0.7;
+}
+
+.products-home > * {
+    position: relative;
+}
+
+.products-home h2 {
+    text-align: left;
+    padding-left: 110px;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    line-height: 130px;
+}
+
+/* horizontal scrolling cards (the 3rd card is cut off in figma so its a slider) */
+.product-strip {
+    display: flex;
+    gap: 30px;
+    margin: 88px 0 121px;
+    padding: 0 110px 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 110px;
+    scrollbar-width: none;
+    cursor: grab;
+}
+
+.product-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.product-strip.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+}
+
+.product-card {
+    position: relative;
+    flex: 0 0 462px;
+    height: 502px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    scroll-snap-align: start;
+    text-align: left;
+}
+
+.product-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+    pointer-events: none;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.product-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000);
+}
+
+.product-card-text {
+    position: absolute;
+    left: 38px;
+    right: 30px;
+    bottom: 66px;
+    z-index: 1;
+}
+
+.product-card h3 {
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+
+.product-card p {
+    font-size: 20px;
+    letter-spacing: -0.4px;
+}
+
+/* ---------- COST CTA ---------- */
+.cost-cta {
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.cost-cta h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+}
+
+.cost-cta p {
+    width: 803px;
+    max-width: 100%;
+    font-size: 25px;
+    letter-spacing: -0.5px;
+    margin-top: 40px;
+}
+
+/* ---------- GET A QUOTE ---------- */
+.quote-section {
+    background: #000 url('../images/quote-bg.png') left top / cover no-repeat;
+    padding: 144px 0 204px;
+    color: var(--white);
+}
+
+.quote-inner {
+    width: 90%;
+    max-width: 1245px;
+    margin: 0 auto;
+}
+
+.quote-title {
+    max-width: 803px;
+    margin-bottom: 64px;
+}
+
+.quote-title h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    width: 400px;
+    max-width: 100%;
+}
+
+.quote-title p {
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-top: 26px;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.quote-box {
+    background: #000;
+    border: 1px solid #000;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(142, 142, 142, 0.25);
+    min-height: 860px;
+    padding: 117px 71px 50px 68px;
+}
+
+/* step indicator */
+.steps {
+    display: flex;
+    align-items: flex-start;
+    padding: 0 23px;
+    margin-bottom: 70px;
+}
+
+.step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 27px;
+}
+
+.step-circle {
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: #272727;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    transition: background 0.3s;
+}
+
+.step-circle .icon {
+    display: none;
+}
+
+.step.active .step-circle {
+    background: var(--white);
+    color: var(--black);
+}
+
+.step.done .step-circle {
+    background: var(--cyan);
+}
+
+.step.done .step-no {
+    display: none;
+}
+
+.step.done .step-circle .icon {
+    display: block;
+}
+
+.step-name {
+    position: absolute;
+    top: 41px;
+    width: 200px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.step-bar {
+    flex: 1;
+    height: 8px;
+    margin-top: 10px;
+    background: #272727;
+    transition: background 0.3s;
+}
+
+.step-bar.done {
+    background: var(--cyan);
+}
+
+/* steps content */
+.quote-step {
+    display: none;
+    min-height: 420px;
+    animation: fadeStep 0.4s ease;
+}
+
+.quote-step.active {
+    display: block;
+}
+
+@keyframes fadeStep {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: none; }
+}
+
+.quote-step h3 {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+}
+
+.step-desc {
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin: 10px 0 45px;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.step-desc strong {
+    color: var(--cyan);
+}
+
+/* category circles */
+.category-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.category-item input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.category-circle {
+    position: relative;
+    width: 245px;
+    height: 245px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    outline: 4px solid transparent;
+    outline-offset: 8px;
+    transition: outline-color 0.3s, transform 0.3s;
+}
+
+.category-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-circle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.55);
+    transition: background 0.3s;
+}
+
+.category-circle:hover {
+    transform: scale(1.03);
+}
+
+.category-item input:checked + .category-circle {
+    outline-color: var(--cyan);
+}
+
+.category-item input:checked + .category-circle::before {
+    background: rgba(13, 43, 62, 0.55);
+}
+
+.category-num,
+.category-name {
+    position: relative;
+    z-index: 2;
+    font-size: 25px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.category-num {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.category-name {
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+/* specs */
+.spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 40px;
+    max-width: 900px;
+}
+
+.spec-field label {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.spec-field input,
+.spec-field select,
+.estimate-send input {
+    width: 100%;
+    height: 50px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    padding: 0 18px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+}
+
+.spec-field input:focus,
+.spec-field select:focus,
+.estimate-send input:focus {
+    border-color: var(--cyan);
+}
+
+/* red border when the value is wrong (main.js adds .invalid) */
+.estimate-send input.invalid {
+    border-color: #ff7b7b;
+}
+
+.spec-field.hidden {
+    display: none;
+}
+
+/* the CM / INCH row takes the whole width of the grid */
+.spec-full {
+    grid-column: 1 / -1;
+}
+
+.spec-label {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* CM | INCH switch (looks like 2 pill buttons) */
+.unit-toggle {
+    display: inline-flex;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 30px;
+    padding: 4px;
+}
+
+.spec-field .unit-toggle label {
+    display: block;
+    margin: 0;
+}
+
+/* hide the real radio circle (the .spec-field input rule above would make it big) */
+.spec-field .unit-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.unit-toggle span {
+    display: block;
+    min-width: 90px;
+    padding: 9px 20px;
+    border-radius: 30px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--placeholder);
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+}
+
+.unit-toggle span:hover {
+    color: #fff;
+}
+
+.unit-toggle input:checked + span {
+    background: var(--cyan);
+    color: #fff;
+}
+
+/* keyboard users can see which one is focused */
+.unit-toggle input:focus-visible + span {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* upload */
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 260px;
+    max-width: 900px;
+    border: 2px dashed #4b4f58;
+    border-radius: 16px;
+    background: rgba(59, 63, 72, 0.35);
+    color: #a0a3a8;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    padding: 20px;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+.upload-box input {
+    display: none;
+}
+
+.upload-box:hover,
+.upload-box.dragover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+
+.upload-box.has-file {
+    border-style: solid;
+    border-color: var(--cyan);
+    color: #fff;
+}
+
+/* estimate result */
+.estimate-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 50px;
+    margin-top: 35px;
+}
+
+.estimate-label {
+    font-size: 18px;
+    opacity: 0.6;
+}
+
+.estimate-range {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: -1px;
+    margin: 4px 0 24px;
+}
+
+.estimate-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 18px;
+}
+
+.estimate-table td {
+    padding: 10px 0;
+    border-bottom: 1px solid #272727;
+}
+
+.estimate-table td:last-child {
+    text-align: right;
+    font-weight: 600;
+}
+
+.estimate-table .total-row td {
+    border-bottom: none;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.estimate-send {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #121212;
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.estimate-send p {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.btn-send-quote {
+    height: 50px;
+    border: none;
+    border-radius: 60px;
+    background: var(--dark-blue);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-send-quote:hover {
+    background: #12405c;
+}
+
+.btn-send-quote:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.quote-msg {
+    font-size: 14px !important;
+    opacity: 1 !important;
+}
+
+.quote-msg.ok {
+    color: var(--cyan);
+}
+
+.quote-msg.fail {
+    color: #ff7b7b;
+}
+
+.quote-error {
+    display: none;
+    color: #ff7b7b;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.quote-error.show {
+    display: block;
+}
+
+/* bottom of quote box */
+.quote-line {
+    border: none;
+    border-top: 1px solid rgba(252, 252, 252, 0.5);
+    margin: 60px 46px 33px;
+}
+
+.quote-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-left: 46px;
+}
+
+.quote-note {
+    font-size: 20px;
+    font-style: italic;
+    letter-spacing: -0.4px;
+    font-family: Arial, sans-serif;
+}
+
+.quote-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-step {
+    width: 160px;
+    height: 60px;
+    border-radius: 30px;
+    border: none;
+    background: #484747;
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-step:hover {
+    background: #5b5a5a;
+}
+
+.btn-next.ready {
+    background: var(--cyan);
+}
+
+.btn-back {
+    background: transparent;
+    border: 1px solid #484747;
+    visibility: hidden;
+}
+
+/* ---------- SEND A MESSAGE ---------- */
+.message-home {
+    background: url('../images/contact_us-bg.png') center / cover no-repeat;
+    color: var(--white);
+    padding: 77px 0 120px;
+    min-height: 1000px;
+}
+
+.message-home-inner {
+    width: 90%;
+    max-width: 1147px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.small-label {
+    font-size: 25px;
+    font-weight: 600;
+    opacity: 0.5;
+    line-height: 49px;
+}
+
+.small-label.dark {
+    color: #04131c;
+    line-height: 75px;
+}
+
+.message-left {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.message-left h2 {
+    width: 450px;
+    max-width: 100%;
+    font-size: 40px;
+    font-weight: 700;
+    margin-top: 31px;
+}
+
+.message-contacts {
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.message-left .contact-item a,
+.message-left .contact-item p {
+    color: var(--white);
+}
+
+.message-left .contact-item a.underline {
+    text-decoration: underline;
+}
+
+.message-right {
+    padding-top: 145px;
+}
+
+/* ---------- VISIT OUR OFFICE ---------- */
+.office {
+    display: flex;
+    gap: 79px;
+    padding: 60px 60px 94px;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.office-map {
+    flex: 0 0 749px;
+    height: 546px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.office-map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.office-info h2 {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 30px;
+}
+
+.office-address h4 {
+    color: var(--dark-blue);
+}
+
+.office-address p {
+    color: var(--dark-blue);
+    width: 340px;
+    max-width: 100%;
+}
+
+.office-info hr {
+    width: 422px;
+    max-width: 100%;
+    border: none;
+    border-top: 1px solid rgba(18, 18, 18, 0.3);
+    margin: 37px 0;
+}
+
+.hours-table {
+    border-collapse: collapse;
+    font-size: 20px;
+}
+
+.hours-table th {
+    text-align: left;
+    font-weight: 700;
+    width: 157px;
+    padding: 0 0 13px;
+}
+
+.hours-table td {
+    padding: 0 0 13px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1280px) {
+    .service-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .office {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .office-map {
+        flex: none;
+        width: 100%;
+        height: 420px;
+    }
+
+    .category-circle {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .hero-bottom {
+        flex-direction: column;
+        gap: 20px;
+        left: 50px;
+        bottom: 60px;
+    }
+
+    .hero-side {
+        width: 100%;
+        max-width: 527px;
+    }
+
+    .hero-side p {
+        padding-left: 0;
+    }
+
+    .hero-line-h {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 48px;
+    }
+
+    .slide-story h2,
+    .slide-products h2 {
+        font-size: 60px;
+    }
+
+    .slide-products-images {
+        display: none;
+    }
+
+    .about-home-cols,
+    .services-home-top,
+    .message-home-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .about-home-cols {
+        gap: 30px;
+    }
+
+    .about-home-cols p,
+    .services-home-top p {
+        width: 100%;
+    }
+
+    .divider-v {
+        width: 100%;
+        height: 1px;
+    }
+
+    .message-contacts {
+        margin-top: 50px;
+    }
+
+    .message-right {
+        padding-top: 20px;
+        width: 100%;
+    }
+
+    .quote-box {
+        padding: 70px 30px 40px;
+    }
+
+    .category-list {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .estimate-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .quote-line {
+        margin: 40px 0 25px;
+    }
+
+    .quote-footer {
+        padding-left: 0;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .quote-buttons {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 100vh;
+        min-height: 600px;
+    }
+
+    .hero-line-v {
+        left: 18px;
+    }
+
+    .hero-bottom {
+        left: 34px;
+        right: 20px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero-side p {
+        font-size: 18px;
+    }
+
+
+    .slide-story h2,
+    .slide-products h2 {
+        font-size: 42px;
+    }
+
+    /* smaller and fewer tiles on phones */
+    .story-stage {
+        --s: 0.7;
+    }
+
+    .t13, .t14, .t15, .t16 {
+        display: none;
+    }
+
+    .slide-products-text p {
+        font-size: 18px;
+    }
+
+    .about-home-cols p,
+    .services-home-top p {
+        font-size: 18px;
+        line-height: 32px;
+    }
+
+    .kai-quote .indent {
+        width: 60px;
+    }
+
+    .kai-quote p {
+        font-size: 26px;
+    }
+
+    .kai-quote em {
+        font-size: 30px;
+    }
+
+    .quote-mark.open {
+        font-size: 100px;
+        top: -30px;
+    }
+
+    .why-kai {
+        padding-bottom: 120px;
+    }
+
+    .services-home {
+        padding: 100px 0;
+    }
+
+    .services-home-top h2,
+    .products-home h2,
+    .cost-cta h2,
+    .quote-title h2,
+    .message-left h2,
+    .office-info h2 {
+        font-size: 30px;
+    }
+
+    .service-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card {
+        height: 420px;
+    }
+
+    .products-home {
+        height: auto;
+        padding: 60px 0 80px;
+    }
+
+    .products-home h2 {
+        padding-left: 5%;
+        line-height: 1.3;
+    }
+
+    .product-strip {
+        padding: 0 5% 10px;
+        scroll-padding: 0 5%;
+        margin: 40px 0 60px;
+    }
+
+    .product-card {
+        flex-basis: 85%;
+        height: 420px;
+    }
+
+    .product-card-text {
+        left: 24px;
+        bottom: 34px;
+    }
+
+    .cost-cta {
+        height: auto;
+        padding: 100px 20px;
+    }
+
+    .cost-cta p,
+    .quote-title p,
+    .step-desc {
+        font-size: 18px;
+    }
+
+    .quote-section {
+        padding: 80px 0 100px;
+    }
+
+    .quote-box {
+        padding: 50px 18px 30px;
+        min-height: 0;
+    }
+
+    .steps {
+        padding: 0 10px;
+        margin-bottom: 60px;
+    }
+
+    .step-name {
+        font-size: 13px;
+        width: 90px;
+    }
+
+    .quote-step h3 {
+        font-size: 26px;
+    }
+
+    .category-circle {
+        width: 140px;
+        height: 140px;
+    }
+
+    .category-num,
+    .category-name {
+        font-size: 16px;
+    }
+
+    .spec-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .estimate-range {
+        font-size: 32px;
+    }
+
+    .quote-note {
+        font-size: 15px;
+    }
+
+    .btn-step {
+        width: 120px;
+        height: 50px;
+    }
+
+    .message-home {
+        min-height: 0;
+        padding: 60px 0 80px;
+    }
+
+    .office {
+        padding: 40px 5% 60px;
+    }
+
+    .office-map {
+        height: 300px;
+    }
+
+    .hours-table {
+        font-size: 17px;
+    }
+}

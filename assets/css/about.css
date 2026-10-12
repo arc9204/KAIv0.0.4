@@ -1,0 +1,400 @@
+/* =========================================================
+   about.css - styles for about.php
+   ========================================================= */
+
+/* ---------- INTRO ---------- */
+.about-intro {
+    padding-top: 165px;
+    text-align: center;
+    width: 90%;
+    max-width: 814px;
+    margin: 0 auto;
+}
+
+.pill {
+    display: inline-block;
+    padding: 10px 19px;
+    border: 1px solid rgba(179, 179, 179, 0.5);
+    border-radius: 20px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+}
+
+.about-intro h1 {
+    font-family: var(--font-body);
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: -1.28px;
+    line-height: 80px;
+    margin: 48px 0 48px;
+    color: #000;
+}
+
+.about-intro p {
+    font-size: 25px;
+    line-height: 50px;
+    letter-spacing: -0.5px;
+    opacity: 0.5;
+    color: #000;
+}
+
+.about-banner {
+    position: relative;
+    margin: 240px 37px 0;
+    height: 574px;
+    overflow: hidden;
+}
+
+.about-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000);
+}
+
+/* ---------- MISSION / VISION ---------- */
+.mission-vision {
+    width: 90%;
+    max-width: 1300px;
+    margin: 166px auto 0;
+}
+
+.mission-vision p {
+    font-size: 40px;
+    line-height: 50px;
+    letter-spacing: -0.8px;
+    text-align: center;
+    color: var(--black);
+}
+
+.mission {
+    width: 902px;
+    max-width: 100%;
+    margin-left: auto;
+}
+
+.vision {
+    width: 800px;
+    max-width: 100%;
+    margin-top: 161px;
+    margin-left: 40px;
+}
+
+/* the "O" in figma uses a different font */
+.big-o {
+    font-family: 'Metal', serif;
+    font-size: 48px;
+}
+
+/* ---------- CORE VALUES ---------- */
+.spaced-title {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: 16px;
+    line-height: 50px;
+    text-align: center;
+}
+
+.core-values {
+    margin-top: 377px;
+}
+
+.values-list {
+    width: 90%;
+    max-width: 1261px;
+    margin: 47px auto 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+}
+
+.value-item {
+    text-align: center;
+}
+
+.value-icon {
+    display: inline-flex;
+    width: 85px;
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    color: var(--black);
+    margin-bottom: 47px;
+}
+
+.value-icon .icon {
+    stroke-width: 1.3;
+}
+
+.value-item p {
+    font-size: 30px;
+    letter-spacing: -0.6px;
+    line-height: 50px;
+}
+
+/* ---------- FOUNDERS ---------- */
+.founders {
+    margin-top: 458px;
+    text-align: center;
+}
+
+.founders h2 {
+    font-family: var(--font-body);
+    font-size: 100px;
+    font-weight: 600;
+    letter-spacing: 10px;
+    line-height: 1.2;
+}
+
+.founders-cards {
+    position: relative;
+    width: 790px;
+    max-width: 90%;
+    height: 360px;
+    margin: 41px auto 0;
+}
+
+.card-back,
+.card-front {
+    position: absolute;
+    inset: 0;
+    background: var(--white);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.card-back {
+    transform: rotate(-4.32deg) translate(-25px, -10px);
+}
+
+.card-front {
+    display: flex;
+    align-items: center;
+}
+
+.founder {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.founder-initials {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--dark-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.founder h3 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.founder p {
+    font-size: 18px;
+    opacity: 0.5;
+}
+
+.founder-line {
+    width: 1px;
+    height: 236px;
+    background: var(--black);
+}
+
+/* ---------- PARTNERSHIPS ---------- */
+.partnerships {
+    margin-top: 434px;
+    padding-bottom: 313px;
+}
+
+.partner-cols {
+    width: 90%;
+    max-width: 1038px;
+    margin: 70px auto 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.partner {
+    flex: 1;
+    max-width: 420px;
+}
+
+.partner h3 {
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 50px;
+    text-align: center;
+    filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.25));
+    margin-bottom: 10px;
+}
+
+.partner p {
+    font-size: 25px;
+    line-height: 50px;
+    letter-spacing: -0.5px;
+}
+
+.partner-line {
+    width: 1px;
+    background: var(--black);
+    flex-shrink: 0;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1024px) {
+    .about-banner {
+        margin: 120px 20px 0;
+        height: 420px;
+    }
+
+    .mission-vision p {
+        font-size: 30px;
+        line-height: 42px;
+    }
+
+    .vision {
+        margin-left: 0;
+        margin-top: 90px;
+    }
+
+    .core-values,
+    .founders,
+    .partnerships {
+        margin-top: 200px;
+    }
+
+    .values-list {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 40px;
+    }
+
+    .founders h2 {
+        font-size: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-intro {
+        padding-top: 130px;
+    }
+
+    .about-intro h1 {
+        font-size: 40px;
+        line-height: 1.2;
+        margin: 30px 0;
+    }
+
+    .about-intro p {
+        font-size: 18px;
+        line-height: 32px;
+    }
+
+    .about-banner {
+        margin-top: 70px;
+        height: 260px;
+    }
+
+    .mission-vision {
+        margin-top: 90px;
+    }
+
+    .mission-vision p {
+        font-size: 22px;
+        line-height: 34px;
+    }
+
+    .big-o {
+        font-size: 28px;
+    }
+
+    .spaced-title {
+        font-size: 26px;
+        letter-spacing: 8px;
+    }
+
+    .core-values,
+    .founders,
+    .partnerships {
+        margin-top: 120px;
+    }
+
+    .values-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .value-icon {
+        margin-bottom: 14px;
+    }
+
+    .value-item p {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .founders h2 {
+        font-size: 44px;
+        letter-spacing: 6px;
+    }
+
+    .founders-cards {
+        height: auto;
+    }
+
+    .card-back {
+        display: none;
+    }
+
+    .card-front {
+        position: relative;
+        flex-direction: column;
+        gap: 30px;
+        padding: 40px 20px;
+    }
+
+    .founder-line {
+        width: 60%;
+        height: 1px;
+    }
+
+    .partnerships {
+        padding-bottom: 120px;
+    }
+
+    .partner-cols {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .partner {
+        max-width: none;
+    }
+
+    .partner-line {
+        height: 1px;
+        width: 100%;
+    }
+
+    .partner p {
+        font-size: 18px;
+        line-height: 32px;
+    }
+}

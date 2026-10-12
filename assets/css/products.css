@@ -1,0 +1,248 @@
+/* =========================================================
+   products.css - styles for products.php
+   ========================================================= */
+
+/* ---------- HERO ---------- */
+.products-hero {
+    position: relative;
+    width: calc(100% - 186px);
+    max-width: 1247px;
+    height: 552px;
+    margin: 120px auto 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: url('../images/aluminumdoors-card.png') center 40% / cover no-repeat;
+    color: var(--white);
+}
+
+.products-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000);
+}
+
+.products-hero-text {
+    position: absolute;
+    left: 58px;
+    top: 168px;
+    width: 843px;
+    max-width: calc(100% - 80px);
+}
+
+.products-hero h1 {
+    font-family: var(--font-body);
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: -1.28px;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.products-hero p {
+    width: 664px;
+    max-width: 100%;
+    font-size: 24px;
+    letter-spacing: -0.48px;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    margin-top: 21px;
+}
+
+/* ---------- FILTER TABS ---------- */
+.filter-bar {
+    margin-top: 38px;
+    border-top: 1px solid rgba(18, 18, 18, 0.3);
+    border-bottom: 1px solid rgba(18, 18, 18, 0.3);
+    position: sticky;
+    top: 72px; /* stays below the fixed navbar */
+    background: var(--white);
+    z-index: 50;
+}
+
+.filter-tabs {
+    width: calc(100% - 186px);
+    max-width: 1247px;
+    margin: 0 auto;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-left: 20px;
+}
+
+.filter-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 40px;
+    color: #000;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.tab .icon {
+    color: #4a4459;
+    transition: transform 0.3s;
+}
+
+.tab.active {
+    font-weight: 700;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    bottom: -2px;
+    height: 2px;
+    background: #000;
+}
+
+.tab.active .icon {
+    transform: rotate(180deg);
+}
+
+/* ---------- PRODUCTS ---------- */
+.product-sections {
+    width: calc(100% - 210px);
+    max-width: 1229px;
+    margin: 0 auto;
+    padding-bottom: 196px;
+}
+
+.product-category {
+    padding-top: 102px;
+    scroll-margin-top: 170px;
+}
+
+.product-category.hidden {
+    display: none;
+}
+
+.product-category h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    margin-bottom: 25px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 75px;
+}
+
+.product-photo {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #d9d9d9;
+}
+
+.product-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.product-photo.no-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-photo.no-photo span {
+    font-size: 16px;
+    color: rgba(18, 18, 18, 0.4);
+}
+
+.product-photo:hover img {
+    transform: scale(1.05);
+}
+
+.product-item h3 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.48px;
+    margin-top: 30px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1024px) {
+    .products-hero,
+    .filter-tabs,
+    .product-sections {
+        width: calc(100% - 40px);
+    }
+
+    .product-grid {
+        gap: 30px;
+    }
+
+    .filter-tabs {
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-hero {
+        height: 420px;
+        margin-top: 100px;
+    }
+
+    .products-hero-text {
+        left: 24px;
+        top: auto;
+        bottom: 40px;
+    }
+
+    .products-hero h1 {
+        font-size: 40px;
+    }
+
+    .products-hero p {
+        font-size: 17px;
+    }
+
+    .tab {
+        font-size: 15px;
+    }
+
+    .filter-tabs {
+        height: 64px;
+    }
+
+    .product-category {
+        padding-top: 60px;
+    }
+
+    .product-category h2 {
+        font-size: 26px;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-item h3 {
+        font-size: 20px;
+        margin-top: 14px;
+    }
+
+    .product-sections {
+        padding-bottom: 100px;
+    }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 39" width="37" height="39">
+  <!-- temporary cube logo (export the real logo.png from Figma and replace this) -->
+  <polygon points="18.5,2 35,10.5 18.5,19 2,10.5" fill="#7fe0e6"/>
+  <polygon points="2,10.5 18.5,19 18.5,37 2,28.5" fill="#0d2b3e"/>
+  <polygon points="35,10.5 18.5,19 18.5,37 35,28.5" fill="#00b5c0"/>
+  <polyline points="2,10.5 18.5,19 35,10.5" fill="none" stroke="#e6f6f8" stroke-width="1"/>
+  <line x1="18.5" y1="19" x2="18.5" y2="37" stroke="#e6f6f8" stroke-width="1"/>
+</svg>
