@@ -1,0 +1,5 @@
+   # don't allow php files to run inside the uploads folder (security)
+   <FilesMatch "\.(php|phtml|php3|php4|php5|phar)$">
+       Require all denied
+   </FilesMatch>
+   Options -Indexes
